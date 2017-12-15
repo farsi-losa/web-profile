@@ -1,0 +1,126 @@
+
+@import "lib.scss";
+body{
+    font-family: 'helvetica neue',arial;
+}
+.main-container{
+    position: relative;
+}
+
+.section{
+    color:#fff;
+    position: relative;
+
+    &.min-600{
+        min-height: 600px;
+    }
+
+    .title{
+        font-size: 36px;
+        font-weight: bold;
+        text-transform: uppercase;
+    }
+
+    .bg-section{
+        position: absolute;
+        top:0;
+        bottom: 0;
+
+        &.right-side{
+            right: 0;
+        }
+        &.left-side{
+            left: 0;
+        }
+    }
+
+    &-1{
+        background: url(image/bg-section-1.jpg);
+        height: 399px;
+        .welcome-wording{
+            padding: 107px 0 0;
+            display: block;
+            position: relative;
+            font-family: Helvetica neue;
+            font-weight: 100;
+        }
+        .main{
+            font-size: 121px;
+        }
+        .submain{
+            font-size: 48px;
+        }
+    }
+
+    &-2{
+        .right-side{
+            min-height: 600px;
+        }
+        .my-name{
+            font-size: 72px;
+            text-transform: uppercase;
+            line-height: 52px;
+            margin: -50PX 0;
+            text-align: right; 
+            font-weight: bold;
+        }
+        .bg-section2{
+            background: $red-color;
+            position: absolute;
+            right: 0;
+            height: 600px;
+            z-index: 0;
+
+            &::before{
+                content: " ";
+                left: -210%;
+                top: 0;
+                position: absolute;
+                border-width: 300px;
+                border-color: #c55e5e #c55e5e transparent transparent;
+                border-style: solid;
+            }
+        }
+
+        .bio{
+            margin: 115px 0 0;
+            .about-me{
+                font-size: 36px;
+                text-transform: uppercase;
+                font-weight: bold;
+            }
+        }
+        .sosmed{
+            margin: 45px 0 0;
+            img{
+                max-width: 30px;
+                margin-left: 13px;
+            }
+        }
+    }
+    &-3{
+        .study{
+            position: relative;
+            .dot-timeline{
+                border: 2px solid $gray-color;
+                background: $red-color;
+                right: -68px;
+            }
+        }
+        .work{
+            position: relative;
+            .dot-timeline{
+                border: 2px solid $red-color;
+                background: $gray-color;
+                left: -68px;
+            }
+        }
+        .dot-timeline{
+            width: 15px;
+            height: 15px;
+            position: absolute;
+            top:22px;
+            border-radius: 8px;
+        }
+    }
+}
