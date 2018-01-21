@@ -4,14 +4,22 @@ import Balls from './Balls.js';
 var balls = [
         {color:'red', x:10, y:20},
         {color:'green', x:100, y:70},
-        {color:'blue', x:200, y:40}
+        {color:'blue', x:200, y:40},
+        {color:'yellow', x:300, y:80},
+        {color:'white', x:230, y:30},
+        {color:'orange', x:160, y:100},
+        {color:'magenta', x:120, y:120},
+        {color:'yellow', x:110, y:190},
+        {color:'cyan', x:320, y:230},
+        {color:'brown', x:120, y:230},
     ],
+    qty = 1,
     canvas = {
         width: 400,
         height: 400,
         position: 'relative'
     }
-
+    let pressed = new Set();
 class BounchingBalls extends Component {
 
     constructor(props) {
@@ -24,17 +32,22 @@ class BounchingBalls extends Component {
         this.addMoreBall = this.addMoreBall.bind(this);
         this.increaseSpeed = this.increaseSpeed.bind(this);
         this.decreaseSpeed = this.decreaseSpeed.bind(this);
+        this.onkeyboardCLick = this.onkeyboardCLick.bind(this);
+        this.onkeyboardPress = this.onkeyboardPress.bind(this);
     }
+    
     componentWillMount() {
 
     }
 
     componentDidMount() {
-
+        document.addEventListener('keypress', this.onkeyboardCLick, false);
+        document.addEventListener('keydown', this.onkeyboardPress, false);
     }
 
     componentWillUnmount() {
-        
+        document.removeEventListener('keypress', this.onkeyboardCLick, false);
+        document.removeEventListener('keydown', this.onkeyboardPress, false);
     }
 
     onPlay(){
@@ -45,7 +58,9 @@ class BounchingBalls extends Component {
     }
 
     addMoreBall(){
-        
+        this.setState({
+            ballqty : this.state.ballqty == 10 ? this.state.ballqty : this.state.ballqty + 1
+        });
     }
 
     increaseSpeed(){
@@ -60,29 +75,56 @@ class BounchingBalls extends Component {
         })
     }
 
-    render() {
+    onkeyboardCLick(event){
+
+        if (event.code === 'Space'){
+            this.onPlay();
+        } 
+
+        if (event.keyCode == 13){
+            this.addMoreBall();
+        }
         
+    }
+
+    onkeyboardPress(event){
+        if(event.keyCode == 38){
+            this.increaseSpeed();
+        } 
+        
+        if(event.keyCode == 40){
+            this.decreaseSpeed();
+        }
+        
+    }
+
+    render() {
+        let listBalls = []; 
+            for (var i = 0; i < this.state.ballqty; i++){
+                var ball = balls[i];
+                listBalls.push(
+                    <Balls 
+                        key = {i}
+                        color={ball.color}
+                        togglePlay={ this.state.togglePlay } 
+                        positionX={ball.x} 
+                        positionY={ball.y}
+                        speed={this.state.speed}
+                        canvas= {canvas}
+                    />
+                )
+            
+        }
         return (
             <div className="bouching-balls">
-                <div className="canvas" style={Style.Canvas}>
+                <div 
+                    className="canvas" 
+                    style={Style.Canvas}
+                >
                     {
-                        balls.map((ball,index) =>
-                            <Balls 
-                                key = {index}
-                                color={ball.color}
-                                togglePlay={ this.state.togglePlay } 
-                                positionX={ball.x} 
-                                positionY={ball.y}
-                                speed={this.state.speed}
-                                canvas= {canvas}
-                            />
-                        )
+                        listBalls
                     }
                 </div>
-                <button onClick={this.onPlay}>Pause/play</button>
-                <button onClick={this.addMoreBall}>add ball</button>
-                <button onClick={this.increaseSpeed}>+</button>
-                <button onClick={this.decreaseSpeed}>-</button>
             </div>
         );
     }

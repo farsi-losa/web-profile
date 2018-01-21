@@ -14,7 +14,7 @@ var ball = {
         },
         max : 10,
         items : [],
-        speed : 40
+        speed : 80
     },
     myInterval = null
  
@@ -31,6 +31,8 @@ class Balls extends Component {
             togglePlay : this.props.togglePlay,
             //speed : this.props.speed
         }
+        this.color = this.props.color;
+        this.removeThisBall = this.removeThisBall.bind(this)
     }
     
     componentWillMount(){
@@ -40,21 +42,18 @@ class Balls extends Component {
     componentWillReceiveProps(nextProps, nextState){  
         if (nextProps.togglePlay == 'play') {
             this.ballStart();
-            console.log('play');
         } else if(nextProps.togglePlay != 'play') {
             this.ballPause(this.state.lineX,this.state.lineY);
-            console.log('pause');
         }
-        console.log(ball.speed)
         
-        if (nextProps.speed == 'up' ) {
-            ball.speed = ball.speed + 10;
+        if (nextProps.speed == 'down' ) {
+            ball.speed = ball.speed > 720 ? ball.speed : (ball.speed * 2);
             this.ballSpeedChange(ball.speed);
-        } else if(nextProps.speed == 'down' ){
-            ball.speed = ball.speed <= 40 ? ball.speed : ball.speed  - 10;
+        } else if(nextProps.speed == 'up' ){
+            ball.speed = ball.speed <= 10 ? ball.speed : (ball.speed  / 2);
             this.ballSpeedChange(ball.speed);
         }
-        console.log(nextProps, nextState)
+        console.log(ball.speed);
     }
 
     ballStart() {
@@ -62,7 +61,7 @@ class Balls extends Component {
             this.myInterval = setInterval(function() {
                 this.changeDirection(this.state.ballStepX,this.state.ballStepY);
                 this.ballMove(this.state.lineX,this.state.lineY);
-            }.bind(this), 1000/ball.speed)
+            }.bind(this), ball.speed)
     }
 
     ballSpeedChange(speed) {
@@ -70,7 +69,7 @@ class Balls extends Component {
             this.myInterval = setInterval(function() {
                 this.changeDirection(this.state.ballStepX,this.state.ballStepY);
                 this.ballMove(this.state.lineX,this.state.lineY);
-            }.bind(this), 1000/speed)
+            }.bind(this), speed)
     }
 
     ballMove( x , y ) {
@@ -105,9 +104,16 @@ class Balls extends Component {
         }
     }
 
+    removeThisBall(){
+        this.color = '#999';
+        console.log('click');
+    }
+
     render(){
+        console.log(this.state.lineX);
+        console.log(this.state.lineY);
         return(
-            <div style={{ ...Style.Ball, background : this.props.color, top : this.state.lineY, left : this.state.lineX}} />
+            <div onClick={this.removeThisBall} style={{ ...Style.Ball, background : this.color, top : this.state.lineY, left : this.state.lineX}} />
         );
     }
 }
@@ -118,12 +124,6 @@ var Style = {
         borderRadius: '50%',
         position:'absolute'
     },
-    Canvas: {
-        width: 400,
-        height: 400,
-        background: '#999',
-        position: 'relative'
-    }
 }
 
 export default Balls;
